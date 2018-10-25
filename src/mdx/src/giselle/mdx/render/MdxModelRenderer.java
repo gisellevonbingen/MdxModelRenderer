@@ -395,7 +395,7 @@ public class MdxModelRenderer
 		double ry = Math.toRadians(dy);
 		double rp = Math.toRadians(dp);
 
-		float variation = matrix.variation * 4;
+		float variation = matrix.variation;
 		double variationedYawSpeed = matrix.speed + (Math.random() * 2 - 1.0D) * variation;
 		double variationedPitchSpeed = matrix.speed + Math.random() * variation;
 		double motionX = -Math.sin(ry) * Math.cos(rp) * variationedYawSpeed;

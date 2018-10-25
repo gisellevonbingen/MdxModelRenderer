@@ -1,7 +1,8 @@
 # MdxModelRenderer
 
 ```
-*.mdx model file renderer
+lwjgl mdx model renderer
+
 supports
     sequences(animations)
     geoset animations

@@ -18,8 +18,8 @@ references
 3. https://github.com/Retera/JWC3
  ```
 
-![Example1.png](./Example1.png)
+![example1.png](./example1.png)
 
-![Example2.png](./Example2.png)
+![example2.png](./example2.png)
 
-![Example3.png](./Example3.png)
+![example3.png](./example3.png)

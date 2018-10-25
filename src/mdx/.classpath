@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="mdx/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="../libs/vecmath-1.5.2.jar" sourcepath="/libs/vecmath-1.5.2-sources.jar"/>
+	<classpathentry kind="lib" path="../libs/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="../libs/asm-debug-all.jar"/>
+	<classpathentry kind="lib" path="../libs/jinput.jar"/>
+	<classpathentry kind="lib" path="../libs/laf-plugin-7.2.1.jar"/>
+	<classpathentry kind="lib" path="../libs/laf-widget-7.2.1.jar"/>
+	<classpathentry kind="lib" path="../libs/log4j-api-2.0-beta9.jar"/>
+	<classpathentry kind="lib" path="../libs/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="mdx/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="../libs/lwjgl_test.jar"/>
+	<classpathentry kind="lib" path="../libs/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="../libs/lwjgl_util_applet.jar"/>
+	<classpathentry kind="lib" path="../libs/lwjgl-debug.jar"/>
+	<classpathentry kind="lib" path="../libs/lzma.jar"/>
+	<classpathentry kind="lib" path="../libs/substance-7.2.1.jar"/>
+	<classpathentry kind="lib" path="../libs/trident-7.2.1.jar"/>
+	<classpathentry kind="lib" path="../libs/vecmath-1.5.2-sources.jar"/>
+	<classpathentry kind="lib" path="../libs/gson-2.8.5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

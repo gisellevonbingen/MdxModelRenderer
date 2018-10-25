@@ -1,7 +1,16 @@
 # MdxModelRenderer
 
+```
 *.mdx model file renderer
-support geoset sequences(animations)
+supports
+    sequences(animations)
+    geoset animations
+    texture animations
+    other alpha, color interpolations
+
+but particle rendering is not complete
+i don't know how to render particle
+```
 
 ```
 require libraries

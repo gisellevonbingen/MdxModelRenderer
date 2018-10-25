@@ -78,8 +78,12 @@ public class MdxParticle
 		position.set(newPosition);
 	}
 
+	/*
+	 * I don't know how to render particle
+	 */
 	public void render(float delta, Vector3f rotation2)
 	{
+		/*
 		ModelWrapper modelWrapper = this.modelWrapper;
 		MdxModel model = modelWrapper.getModel();
 		ParticleEmitter2 emitter = this.emitter;
@@ -149,6 +153,7 @@ public class MdxParticle
 		this.addVertexWithUV(drawer, +hw, -hh, 0.0F, u1, v2, xyQuad);
 		drawer.end();
 		MdxLayerFilterMode.applyPartcile2FilterMode(matrix.filterMode, false);
+		*/
 	}
 
 	private void addVertexWithUV(VertexDrawer drawer, float x, float y, float z, float u, float v, boolean xyQuad)

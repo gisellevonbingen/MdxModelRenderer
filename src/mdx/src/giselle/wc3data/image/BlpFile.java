@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
+import javax.imageio.stream.ImageInputStream;
 
 import giselle.wc3data.stream.BlizzardDataInputStream;
 import giselle.wc3data.stream.BlizzardDataOutputStream;
@@ -110,9 +112,13 @@ public class BlpFile
 			System.arraycopy(mipmaps[0], 0, result, jpgHeader.length, mipmaps[0].length);
 
 			ByteArrayInputStream read = new ByteArrayInputStream(result);// byteOut.toByteArray());
-			JPEGImageDecoder jpg = JPEGCodec.createJPEGDecoder(read);
-			Raster r = jpg.decodeAsRaster();
+			ImageReader reader = ImageIO.getImageReadersByFormatName("jpeg").next();
+			ImageInputStream iis = ImageIO.createImageInputStream(read);
+			reader.setInput(iis);
+			
+			Raster r = reader.readRaster(0, new JPEGImageReadParam());
 			read.close();
+			iis.close();
 
 			int picwidth = r.getWidth();
 			int picheight = r.getHeight();
@@ -350,127 +356,6 @@ public class BlpFile
 					}
 				}
 			}
-		}
-
-	}
-
-	public static void writeJpgBLP(BufferedImage b, BlizzardDataOutputStream out, boolean useAlpha, float quality) throws IOException
-	{
-		out.writeNByteString("BLP1", 4);
-		out.writeInt(0); // JPG
-		out.writeInt(useAlpha ? 8 : 0); // No Alpha
-		out.writeInt(b.getWidth());
-		out.writeInt(b.getHeight());
-		out.writeInt(useAlpha ? 4 : 5);
-		out.writeInt(1);
-
-		// The header size of the java generated jpgs
-		int originalHeaderSize = 308;
-		// Size of the header information we will add to every mipmap
-		int mipMapHeaderSize = 20;// useAlpha ? 20 : 17;
-
-		if (useAlpha == false)
-		{
-			originalHeaderSize -= 3;
-		}
-
-		// Manipulate Image, Swap Colors
-		BufferedImage newImage = ImageUtils.convertStandardImageType(b, useAlpha);
-		/*
-		 * if(b.getType() != BufferedImage.TYPE_INT_ARGB && b.getType() != BufferedImage.TYPE_INT_RGB){ newImage = ImageUtils.changeImageType(b, useAlpha? BufferedImage.TYPE_INT_ARGB :
-		 * BufferedImage.TYPE_INT_RGB); }else{ newImage = b; }
-		 */
-
-		for (int x = 0; x < newImage.getWidth(); x++)
-		{
-			for (int y = 0; y < newImage.getHeight(); y++)
-			{
-				int[] pix = new int[4];
-				pix = newImage.getRaster().getPixel(x, y, pix);
-
-				newImage.setRGB(x, y, new Color(pix[2], pix[1], pix[0], pix[3]).getRGB());
-
-			}
-		}
-
-		// Generate MipMaps
-		BufferedImage[] mips = ImageUtils.generateMipMaps(newImage);
-		byte[][] imagesBytes = new byte[16][];
-
-		int i = 0;
-		for (BufferedImage image : mips)
-		{
-
-			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-
-			JPEGImageEncoder jpg = JPEGCodec.createJPEGEncoder(byteOut);
-
-			JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image.getData(), JPEGEncodeParam.COLOR_ID_UNKNOWN);
-			param.setQuality(quality, true);
-			jpg.setJPEGEncodeParam(param);
-
-			jpg.encode(image.getData());
-			imagesBytes[i] = byteOut.toByteArray();
-
-			i++;
-		}
-
-		// Create the jpg header we want to write
-		byte[] newHeader = removeJpgHeaderImageSize(imagesBytes[0], originalHeaderSize);
-		int headerSize = newHeader.length;
-
-		// offset of the first mipmap
-		int offset = 160 + headerSize;
-
-		// Write Mipmap Offset
-		for (byte[] imagesByte : imagesBytes)
-		{
-
-			if (imagesByte == null)
-			{
-				out.writeInt(0);
-			}
-			else
-			{
-				out.writeInt(offset);
-				offset += (imagesByte.length - originalHeaderSize - 1 + mipMapHeaderSize);
-			}
-
-		}
-
-		// Write Mipmap Size
-		for (byte[] imagesByte : imagesBytes)
-		{
-			if (imagesByte == null)
-			{
-				out.writeInt(0);
-			}
-			else
-			{
-				out.writeInt((imagesByte.length - originalHeaderSize - 1 + mipMapHeaderSize));
-			}
-		}
-
-		// HeaderSize
-		out.writeInt(headerSize);
-
-		// Header
-		out.write(newHeader);
-
-		i = 0;
-		// Write Mipmaps
-		for (byte[] imagesByte : imagesBytes)
-		{
-			if (imagesByte != null)
-			{
-
-				createMipMapJpgHeader(out, mips[i].getWidth(), mips[i].getHeight(), useAlpha);
-
-				out.write(imagesByte, originalHeaderSize + 1, imagesByte.length - originalHeaderSize - 1);
-				// writeByteArray(out, imagesByte, originalHeaderSize + 1, imagesByte.length);
-
-			}
-			i++;
 		}
 
 	}
